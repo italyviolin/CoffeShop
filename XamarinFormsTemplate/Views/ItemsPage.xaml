@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="XamarinFormsTemplate.Views.ItemsPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:XamarinFormsTemplate.ViewModels"
+             xmlns:model="clr-namespace:XamarinFormsTemplate.Models"
+             x:Name="BrowseItemsPage"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddItemCommand}" Text="Add" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView x:DataType="local:ItemsViewModel"
+                 IsRefreshing="{Binding IsBusy, Mode=TwoWay}"
+                 Command="{Binding LoadItemsCommand}">
+        <CollectionView x:Name="ItemsListView"
+                        SelectionMode="None"
+                        ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout x:DataType="model:Item" Padding="10">
+                        <Label Style="{DynamicResource ListItemTextStyle}"
+                               FontSize="16"
+                               LineBreakMode="NoWrap"
+                               Text="{Binding Text}" />
+                        <Label Style="{DynamicResource ListItemDetailTextStyle}"
+                               FontSize="13"
+                               LineBreakMode="NoWrap"
+                               Text="{Binding Description}" />
+                        <Label Style="{DynamicResource ListItemDetailTextStyle}"
+                               FontSize="13"
+                               LineBreakMode="NoWrap"
+                               Text="{Binding AddedOnText}" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"
+                                                  CommandParameter="{Binding .}" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
